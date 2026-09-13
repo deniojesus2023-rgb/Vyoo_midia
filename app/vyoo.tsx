@@ -1,39 +1,26 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Activity,
   AlertTriangle,
   ArrowRight,
-  Bell,
-  Building2,
   CalendarDays,
   ChevronDown,
-  CircleDollarSign,
-  Clock3,
-  CreditCard,
-  Eye,
-  FileBarChart,
-  Film,
-  Grid2X2,
   Headphones,
   ImageIcon,
-  LayoutDashboard,
   MapPin,
-  Menu,
-  Monitor,
   MoreHorizontal,
   Megaphone,
   Pause,
   Play,
   Plus,
   Search,
-  Settings,
   Store,
   Upload,
-  Users,
   Wifi,
   X,
 } from "lucide-react";
+import AppShell from "@/components/app-shell";
+import { Empty } from "@/components/empty-state";
 import {
   Button,
   Checkbox,
@@ -86,43 +73,6 @@ const series = [
   1360, 1640, 1720, 1550, 1810, 1680, 1890, 1760, 2010, 1940, 2160, 2050, 2240,
   2110, 2380, 2310,
 ];
-const menus = {
-  admin: [
-    ["Visão geral", LayoutDashboard],
-    ["Estabelecimentos", Store],
-    ["Telas", Monitor],
-    ["Inventário", Grid2X2],
-    ["Campanhas", Megaphone],
-    ["Criativos", ImageIcon],
-    ["Programação", CalendarDays],
-    ["Parceiros", Users],
-    ["Financeiro", CircleDollarSign],
-    ["Relatórios", FileBarChart],
-    ["Incidentes", AlertTriangle],
-    ["Configurações", Settings],
-  ],
-  ads: [
-    ["Visão geral", LayoutDashboard],
-    ["Campanhas", Megaphone],
-    ["Locais", MapPin],
-    ["Criativos", ImageIcon],
-    ["Relatórios", FileBarChart],
-    ["Faturamento", CreditCard],
-    ["Ajuda", Headphones],
-    ["Configurações", Settings],
-  ],
-  parceiro: [
-    ["Início", LayoutDashboard],
-    ["Minha tela", Monitor],
-    ["Meu conteúdo", ImageIcon],
-    ["Campanhas", Megaphone],
-    ["Financeiro", CircleDollarSign],
-    ["Extratos", FileBarChart],
-    ["Estabelecimento", Store],
-    ["Suporte", Headphones],
-    ["Configurações", Settings],
-  ],
-} as const;
 
 export default function Vyoo({
   initialArea = "admin",
@@ -138,8 +88,7 @@ export default function Vyoo({
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [modal, setModal] = useState<Modal>(null),
-    [query, setQuery] = useState(""),
-    [mobile, setMobile] = useState(false);
+    [query, setQuery] = useState("");
   const reload = async () => {
     setLoading(true);
     try {
@@ -231,18 +180,6 @@ export default function Vyoo({
     });
     return () => ctl.abort();
   }, [area, data]);
-  const areaLogo =
-    area === "admin"
-      ? "/vyoo-wordmark.svg"
-      : area === "ads"
-        ? "/vyoo-ads.svg"
-        : "/vyoo-parceiros.svg";
-  const areaLogoAlt =
-    area === "admin"
-      ? "VYOO Central"
-      : area === "ads"
-        ? "VYOO Ads"
-        : "VYOO Parceiros";
   if (loading)
     return (
       <div className="loading">
@@ -253,115 +190,43 @@ export default function Vyoo({
       </div>
     );
   return (
-    <div className={`app-shell area-${area}`}>
-      <aside className={`sidebar ${mobile ? "open" : ""}`}>
-        <div className="brand">
-          <img className="brand-logo" src={areaLogo} alt={areaLogoAlt} />
-          {area === "admin" && (
-            <small className="brand-context">CENTRAL DE OPERAÇÕES</small>
-          )}
-          <button className="close-mobile" onClick={() => setMobile(false)}>
+    <AppShell area={area} orgName={data.settings.name}>
+      {error && (
+        <div className="alert error">
+          {error}
+          <button onClick={() => setError("")}>
             <X />
           </button>
         </div>
-        <nav>
-          {menus[area].map(([label, Icon], i) => (
-            <button key={label} className={i === 0 ? "active" : ""}>
-              <Icon />
-              <span>{label}</span>
-            </button>
-          ))}
-        </nav>
-        <div className="side-note">
-          <i></i>
-          <div>
-            <b>
-              {area === "admin"
-                ? "Rede operando"
-                : area === "ads"
-                  ? "Mídia em veiculação"
-                  : "Player conectado"}
-            </b>
-            <small>Mateus Leme · MG</small>
-          </div>
-        </div>
-      </aside>
-      <div className="app-main">
-        <header className="topbar">
-          <button className="mobile-menu" onClick={() => setMobile(true)}>
-            <Menu />
-          </button>
-          <button className="account">
-            <Building2 />
-            <b>{data.settings.name || "Conta VYOO"}</b>
-            <ChevronDown />
-          </button>
-          <span className="location">
-            <MapPin />
-            Mateus Leme / MG
-          </span>
-          <div className="top-spacer" />
-          <button className="icon-btn" aria-label="Notificações">
-            <Bell />
-            <i />
-          </button>
-          <div className="profile">
-            <span>{area === "admin" ? "MA" : "CM"}</span>
-            <div>
-              <b>{area === "admin" ? "Mariana Alves" : "Carlos Mendes"}</b>
-              <small>
-                {area === "admin"
-                  ? "Administradora"
-                  : area === "ads"
-                    ? "Anunciante"
-                    : "Proprietário"}
-              </small>
-            </div>
-          </div>
-        </header>
-        <main className="content">
-          {error && (
-            <div className="alert error">
-              {error}
-              <button onClick={() => setError("")}>
-                <X />
-              </button>
-            </div>
-          )}
-          {notice && <div className="toast">{notice}</div>}
-          {area === "ads" && modal?.type === "campaign" ? (
-            <CampaignBuilder
-              data={data}
-              act={act}
-              onClose={() => setModal(null)}
-            />
-          ) : area === "admin" ? (
-            <Admin
-              data={data}
-              query={query}
-              setQuery={setQuery}
-              setModal={setModal}
-            />
-          ) : area === "ads" ? (
-            <Ads
-              data={data}
-              query={query}
-              setQuery={setQuery}
-              setModal={setModal}
-              act={act}
-            />
-          ) : (
-            <Partner data={data} setModal={setModal} />
-          )}
-        </main>
-      </div>
+      )}
+      {notice && <div className="toast">{notice}</div>}
+      {area === "ads" && modal?.type === "campaign" ? (
+        <CampaignBuilder data={data} act={act} onClose={() => setModal(null)} />
+      ) : area === "admin" ? (
+        <Admin
+          data={data}
+          query={query}
+          setQuery={setQuery}
+          setModal={setModal}
+        />
+      ) : area === "ads" ? (
+        <Ads
+          data={data}
+          query={query}
+          setQuery={setQuery}
+          setModal={setModal}
+          act={act}
+        />
+      ) : (
+        <Partner data={data} setModal={setModal} />
+      )}
       <ModalView
         modal={modal?.type === "campaign" ? null : modal}
         close={() => setModal(null)}
         data={data}
         act={act}
       />
-    </div>
+    </AppShell>
   );
 }
 
@@ -1324,14 +1189,6 @@ function Partner({
   );
 }
 
-function Empty({ text }: { text: string }) {
-  return (
-    <div className="empty-state">
-      <span>—</span>
-      <p>{text}</p>
-    </div>
-  );
-}
 function formatSync(value: string) {
   if (!value || value === "Nunca") return "Nunca";
   if (value.startsWith("há") || value.startsWith("agora")) return value;
