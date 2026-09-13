@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_onboarding_requests: {
+        Row: {
+          account_kind: string
+          completed_at: string
+          created_at: string
+          organization_id: number
+          organization_name: string
+          profile_name: string
+          user_id: string
+        }
+        Insert: {
+          account_kind: string
+          completed_at: string
+          created_at?: string
+          organization_id: number
+          organization_name: string
+          profile_name: string
+          user_id: string
+        }
+        Update: {
+          account_kind?: string
+          completed_at?: string
+          created_at?: string
+          organization_id?: number
+          organization_name?: string
+          profile_name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_onboarding_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string

@@ -28,6 +28,10 @@ O schema PostgreSQL versionado em `supabase/migrations` inclui organizações, u
 
 Todas as tabelas públicas usam Row Level Security. O acesso é isolado por organização e o banco impede reservas acima da capacidade de cada tela.
 
+## Autenticação
+
+O fluxo disponível em `/login` usa Supabase Auth com sessão em cookies. Após confirmar o e-mail, `/onboarding` cria uma conta de anunciante ou parceiro e direciona o usuário somente ao painel permitido. Perfis administrativos não podem ser criados pelo cadastro público.
+
 ## Estado atual
 
 Esta versão mantém a interface demonstrativa em memória enquanto a camada Supabase é conectada gradualmente às rotas do produto. O banco real e os clientes tipados para navegador e servidor já estão preparados.
