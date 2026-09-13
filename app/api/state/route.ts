@@ -414,6 +414,47 @@ export async function POST(request: Request) {
         .eq("id", venue.partner_organization_id);
       if (orgError) throw orgError;
       message = "Parceiro aprovado";
+    } else if (
+      action === "campaign.approve" ||
+      action === "campaign.reject"
+    ) {
+      if (!isAdmin) return fail("Ação restrita à equipe VYOO.", 403);
+      const { data: campaign, error: campaignQueryError } = await db
+        .from("campaigns")
+        .select(
+          "id,start_date,campaign_creatives(creatives(moderation_status))",
+        )
+        .eq("public_id", String(value.id))
+        .eq("status", "in_review")
+        .single();
+      if (campaignQueryError || !campaign)
+        return fail("Campanha em análise não encontrada.", 404);
+      if (action === "campaign.approve") {
+        const links = (campaign.campaign_creatives ?? []) as any[];
+        const hasApprovedCreative = links.some(
+          (link) => link.creatives?.moderation_status === "approved",
+        );
+        if (!hasApprovedCreative)
+          return fail("Aprove o criativo antes de programar a campanha.");
+      }
+      const today = new Date().toISOString().slice(0, 10);
+      const approved = action === "campaign.approve";
+      const nextStatus = approved
+        ? campaign.start_date > today
+          ? "scheduled"
+          : "active"
+        : "rejected";
+      const { error } = await db
+        .from("campaigns")
+        .update({
+          status: nextStatus,
+          approved_at: approved ? new Date().toISOString() : null,
+        })
+        .eq("id", campaign.id);
+      if (error) throw error;
+      message = approved
+        ? "Campanha aprovada e enviada para a programação"
+        : "Campanha reprovada";
     } else if (action === "campaign.pause" || action === "campaign.resume") {
       const { error } = await db
         .from("campaigns")

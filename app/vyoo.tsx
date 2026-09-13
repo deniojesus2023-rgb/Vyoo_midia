@@ -66,6 +66,7 @@ import {
   Campaign,
   Creative,
 } from "@/lib/model";
+import CampaignBuilder from "@/components/campaign-builder";
 
 declare global {
   interface Document {
@@ -157,7 +158,11 @@ export default function Vyoo({
   useEffect(() => {
     reload();
   }, []);
-  const act = async (action: string, payload: any = {}) => {
+  const act = async (
+    action: string,
+    payload: any = {},
+    options: { keepModal?: boolean } = {},
+  ) => {
     setError("");
     const r = await fetch("/api/state", {
       method: "POST",
@@ -172,7 +177,7 @@ export default function Vyoo({
     setData(j.state);
     setVersion(j.version);
     setNotice(j.message);
-    setModal(null);
+    if (!options.keepModal) setModal(null);
     setTimeout(() => setNotice(""), 3500);
     return true;
   };
@@ -324,7 +329,13 @@ export default function Vyoo({
             </div>
           )}
           {notice && <div className="toast">{notice}</div>}
-          {area === "admin" ? (
+          {area === "ads" && modal?.type === "campaign" ? (
+            <CampaignBuilder
+              data={data}
+              act={act}
+              onClose={() => setModal(null)}
+            />
+          ) : area === "admin" ? (
             <Admin
               data={data}
               query={query}
@@ -345,7 +356,7 @@ export default function Vyoo({
         </main>
       </div>
       <ModalView
-        modal={modal}
+        modal={modal?.type === "campaign" ? null : modal}
         close={() => setModal(null)}
         data={data}
         act={act}
@@ -505,6 +516,9 @@ function Admin({
   const active = data.campaigns.filter((c) => c.status === "Ativa");
   const online = data.screens.filter((s) => s.status === "Online").length;
   const pending = data.creatives.filter((c) => c.status === "Em análise");
+  const pendingCampaigns = data.campaigns.filter(
+    (campaign) => campaign.status === "Em análise",
+  );
   const pendingPartners = data.screens.filter((s) => !s.approved);
   const tickets = data.tickets.filter((t) => t.status === "Aberto");
   const avgOccupancy = data.screens.length
@@ -690,8 +704,29 @@ function Admin({
               <span>FILA OPERACIONAL</span>
               <h3>Requer atenção</h3>
             </div>
-            <b>{pending.length + pendingPartners.length + tickets.length}</b>
+            <b>
+              {pending.length +
+                pendingCampaigns.length +
+                pendingPartners.length +
+                tickets.length}
+            </b>
           </div>
+          {pendingCampaigns.map((campaign) => (
+            <button
+              className="attention-item"
+              key={campaign.id}
+              onClick={() =>
+                setModal({ type: "campaign-review", data: campaign })
+              }
+            >
+              <Megaphone />
+              <span>
+                <b>Aprovar campanha</b>
+                <small>{campaign.name}</small>
+              </span>
+              <ArrowRight />
+            </button>
+          ))}
           {pending.map((c) => (
             <button
               className="attention-item"
@@ -737,7 +772,10 @@ function Admin({
               <ArrowRight />
             </button>
           ))}
-          {!pending.length && !pendingPartners.length && !tickets.length && (
+          {!pending.length &&
+            !pendingCampaigns.length &&
+            !pendingPartners.length &&
+            !tickets.length && (
             <div className="all-clear">
               <span>✓</span>
               <b>Fila em dia</b>
@@ -1334,6 +1372,8 @@ function ModalView({
         </DialogHeader>
         {modal.type === "campaign" ? (
           <CampaignForm data={data} act={act} />
+        ) : modal.type === "campaign-review" ? (
+          <CampaignReview c={modal.data} data={data} act={act} />
         ) : modal.type === "screen" ? (
           <ScreenForm act={act} />
         ) : modal.type === "creative" ? (
@@ -1677,6 +1717,53 @@ function CreativeReview({ c, act }: { c: Creative; act: any }) {
         </Button>
         <Button onClick={() => act("creative.approve", { id: c.id })}>
           Aprovar criativo
+        </Button>
+      </DialogFooter>
+    </>
+  );
+}
+function CampaignReview({
+  c,
+  data,
+  act,
+}: {
+  c: Campaign;
+  data: State;
+  act: any;
+}) {
+  const creative = data.creatives.find((item) => item.id === c.creativeId);
+  const locations = data.screens.filter((screen) =>
+    c.screenIds.includes(screen.id),
+  );
+  return (
+    <>
+      <div className="detail-list">
+        <p><span>Campanha</span><b>{c.name}</b></p>
+        <p><span>Anunciante</span><b>{c.advertiser}</b></p>
+        <p><span>Objetivo</span><b>{c.objective}</b></p>
+        <p><span>Período</span><b>{date(c.start)}–{date(c.end)}</b></p>
+        <p><span>Inventário</span><b>{locations.length} locais · {c.frequency}/h</b></p>
+        <p>
+          <span>Criativo</span>
+          <span>
+            <b>{creative?.name || "Não localizado"}</b>{" "}
+            {creative && <Status value={creative.status} />}
+          </span>
+        </p>
+        <p><span>Investimento</span><b>{money(c.budget)}</b></p>
+      </div>
+      <DialogFooter>
+        <Button
+          variant="outline"
+          onClick={() => act("campaign.reject", { id: c.id })}
+        >
+          Reprovar campanha
+        </Button>
+        <Button
+          disabled={!creative || creative.status !== "Aprovado"}
+          onClick={() => act("campaign.approve", { id: c.id })}
+        >
+          Aprovar e programar
         </Button>
       </DialogFooter>
     </>
@@ -2035,6 +2122,7 @@ function modalTitle(t: string) {
     (
       {
         campaign: "Criar campanha",
+        "campaign-review": "Analisar campanha",
         screen: "Cadastrar tela",
         creative: "Revisar criativo",
         "upload-own": "Enviar conteúdo próprio",
@@ -2056,6 +2144,7 @@ function modalDesc(t: string) {
     (
       {
         campaign: "Configure a compra de mídia em sete etapas.",
+        "campaign-review": "Valide o inventário e programe a veiculação.",
         screen: "O cadastro ficará aguardando instalação e ativação.",
         creative: "A decisão será refletida na campanha do anunciante.",
         inventory: "Ocupação estimada por tela no período.",

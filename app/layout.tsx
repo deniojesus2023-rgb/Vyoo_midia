@@ -3,6 +3,7 @@ import "./globals.css";
 import "./brand.css";
 import "./ui.css";
 import "./dashboard.css";
+import "./campaign-builder.css";
 import "./auth.css";
 export const metadata: Metadata = {
   title: "VYOO · Rede de mídia local",
