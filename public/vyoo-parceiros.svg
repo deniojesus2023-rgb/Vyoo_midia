@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 118" role="img" aria-labelledby="title">
+  <title id="title">VYOO Parceiros</title>
+  <path fill="#111514" d="M8 10h25l31 58 31-58h24l20 28 20-28h25l-34 48v33h-23V59l-20-28-30 60H51L8 10Z"/>
+  <path fill="#00E676" fill-rule="evenodd" d="M222 10a36 36 0 1 1 0 72 36 36 0 0 1 0-72Zm0 18a18 18 0 1 0 0 36 18 18 0 0 0 0-36Zm72-18a36 36 0 1 1 0 72 36 36 0 0 1 0-72Zm0 18a18 18 0 1 0 0 36 18 18 0 0 0 0-36Z"/>
+  <text x="170" y="111" fill="#111514" font-family="Inter Variable, Inter, Arial, sans-serif" font-size="9.5" font-weight="600" letter-spacing="3.1" text-anchor="middle">PARCEIROS</text>
+</svg>

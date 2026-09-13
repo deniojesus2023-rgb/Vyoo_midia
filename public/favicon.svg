@@ -1,9 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="15" fill="#111514"/>
-  <defs>
-    <mask id="left"><rect width="64" height="64" fill="white"/><circle cx="23" cy="32" r="7" fill="black"/><path d="M34 27 Q29 32 34 37 Z" fill="black"/></mask>
-    <mask id="right"><rect width="64" height="64" fill="white"/><circle cx="43" cy="32" r="7" fill="black"/><path d="M32 27 Q37 32 32 37 Z" fill="black"/></mask>
-  </defs>
-  <circle cx="23" cy="32" r="14" fill="#00E676" mask="url(#left)"/>
-  <circle cx="43" cy="32" r="14" fill="#00E676" mask="url(#right)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="VYOO">
+  <rect width="64" height="64" rx="14" fill="#111514"/>
+  <path fill="#00E676" fill-rule="evenodd" d="M22 18a14 14 0 1 1 0 28 14 14 0 0 1 0-28Zm0 7a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm21-7a14 14 0 1 1 0 28 14 14 0 0 1 0-28Zm0 7a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"/>
 </svg>

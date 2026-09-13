@@ -1,21 +1,13 @@
 .brand img.brand-logo {
   display: block;
-  width: 112px;
+  width: 124px;
+  max-height: 48px;
   height: auto;
-}
-
-.brand small {
-  margin-top: 3px;
-  color: #5d6879;
-  font-size: 8px;
-  font-weight: 650;
-  letter-spacing: .24em;
-  text-transform: uppercase;
 }
 
 .screen-brand {
   display: block;
-  width: 64px;
+  width: 74px;
   height: auto;
   margin-bottom: 8px;
 }
@@ -28,5 +20,5 @@
 }
 
 @media (max-width: 760px) {
-  .brand img.brand-logo { width: 104px; }
+  .brand img.brand-logo { width: 116px; }
 }
