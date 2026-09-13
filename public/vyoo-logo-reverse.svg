@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 104" role="img" aria-labelledby="title desc">
+  <title id="title">VYOO</title>
+  <desc id="desc">Rede de mídia local</desc>
+  <defs>
+    <mask id="left-node-r"><rect width="100%" height="100%" fill="white"/><circle cx="244" cy="42" r="18" fill="black"/><path d="M271 31 Q260 42 271 53 Z" fill="black"/></mask>
+    <mask id="right-node-r"><rect width="100%" height="100%" fill="white"/><circle cx="314" cy="42" r="18" fill="black"/><path d="M287 31 Q298 42 287 53 Z" fill="black"/></mask>
+  </defs>
+  <path fill="#FFFFFF" d="M8 8h22l30 60L90 8h22L72 84H48L8 8Z"/>
+  <path fill="#FFFFFF" d="M112 8h24l25 35 25-35h24l-39 53v23h-20V61L112 8Z"/>
+  <circle cx="244" cy="42" r="36" fill="#00E676" mask="url(#left-node-r)"/>
+  <circle cx="314" cy="42" r="36" fill="#00E676" mask="url(#right-node-r)"/>
+  <text x="9" y="101" fill="#FFFFFF" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="600" letter-spacing="6.2">REDE DE MÍDIA LOCAL</text>
+</svg>

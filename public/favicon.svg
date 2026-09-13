@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="15" fill="#111514"/>
+  <defs>
+    <mask id="left"><rect width="64" height="64" fill="white"/><circle cx="23" cy="32" r="7" fill="black"/><path d="M34 27 Q29 32 34 37 Z" fill="black"/></mask>
+    <mask id="right"><rect width="64" height="64" fill="white"/><circle cx="43" cy="32" r="7" fill="black"/><path d="M32 27 Q37 32 32 37 Z" fill="black"/></mask>
+  </defs>
+  <circle cx="23" cy="32" r="14" fill="#00E676" mask="url(#left)"/>
+  <circle cx="43" cy="32" r="14" fill="#00E676" mask="url(#right)"/>
+</svg>

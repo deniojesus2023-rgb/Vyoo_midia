@@ -1,18 +1,32 @@
 # VYOO Mídia
 
-Plataforma de gestão da rede de mídia local VYOO.
+MVP da plataforma de gestão da rede de mídia local VYOO.
 
-## Produtos
+## Áreas do produto
 
-- VYOO Admin: operação da rede, campanhas, parceiros, telas e moderação.
-- VYOO Ads: criação e acompanhamento de campanhas de mídia indoor.
-- VYOO Parceiros: acompanhamento das telas, campanhas e repasses.
-- VYOO Player: componente planejado para distribuição e registro de exibições.
+- **VYOO Admin:** operação, campanhas, telas, inventário, moderação e parceiros.
+- **VYOO Ads:** criação e acompanhamento de campanhas de mídia indoor.
+- **VYOO Parceiros:** acompanhamento das telas, conteúdos e repasses.
+
+## Executar localmente
+
+Requer Node.js 20 ou superior.
+
+```bash
+npm install
+npm run dev
+```
+
+A aplicação estará disponível em `http://localhost:3000`.
 
 ## Estado atual
 
-MVP funcional e navegável. O próximo ciclo transforma a demonstração em produto operacional com autenticação, banco PostgreSQL, permissões por organização e integração do primeiro Player.
+Esta versão é um MVP funcional com dados demonstrativos. As alterações feitas durante a execução ficam em memória. O próximo ciclo substituirá essa camada por Supabase PostgreSQL, autenticação e políticas de acesso por organização.
 
 ## Tecnologias
 
-TypeScript, React e APIs web.
+- Next.js
+- React
+- TypeScript
+- Lucide Icons
+- CSS próprio da VYOO
