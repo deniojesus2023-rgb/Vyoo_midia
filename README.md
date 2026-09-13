@@ -14,19 +14,29 @@ Requer Node.js 20 ou superior.
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
 A aplicação estará disponível em `http://localhost:3000`.
 
+Preencha em `.env.local` a URL e a chave publicável do projeto Supabase. Nunca coloque uma chave secreta ou `service_role` no navegador.
+
+## Banco de dados
+
+O schema PostgreSQL versionado em `supabase/migrations` inclui organizações, usuários, estabelecimentos, telas, criativos, campanhas, inventário, exibições, pagamentos, repasses, suporte e auditoria.
+
+Todas as tabelas públicas usam Row Level Security. O acesso é isolado por organização e o banco impede reservas acima da capacidade de cada tela.
+
 ## Estado atual
 
-Esta versão é um MVP funcional com dados demonstrativos. As alterações feitas durante a execução ficam em memória. O próximo ciclo substituirá essa camada por Supabase PostgreSQL, autenticação e políticas de acesso por organização.
+Esta versão mantém a interface demonstrativa em memória enquanto a camada Supabase é conectada gradualmente às rotas do produto. O banco real e os clientes tipados para navegador e servidor já estão preparados.
 
 ## Tecnologias
 
 - Next.js
 - React
 - TypeScript
+- Supabase PostgreSQL e Auth
 - Lucide Icons
 - CSS próprio da VYOO
