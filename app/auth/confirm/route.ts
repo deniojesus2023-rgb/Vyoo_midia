@@ -7,6 +7,8 @@ export async function GET(request: Request) {
   const tokenHash = url.searchParams.get("token_hash");
   const type = url.searchParams.get("type") as EmailOtpType | null;
   const code = url.searchParams.get("code");
+  const requestedNext = url.searchParams.get("next") ?? "/onboarding";
+  const next = requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/onboarding";
   const supabase = await createClient();
   let error: unknown = null;
 
@@ -18,5 +20,5 @@ export async function GET(request: Request) {
     error = new Error("Link inválido");
   }
 
-  return NextResponse.redirect(new URL(error ? "/login?error=Link+inválido+ou+expirado." : "/onboarding", url.origin));
+  return NextResponse.redirect(new URL(error ? "/login?error=Link+inválido+ou+expirado." : next, url.origin));
 }
