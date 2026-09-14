@@ -13,6 +13,17 @@ export type AuthContext = {
   };
 };
 
+const roleLabels: Record<AuthContext["role"], string> = {
+  owner: "Proprietário",
+  admin: "Administrador",
+  manager: "Gerente",
+  viewer: "Visualizador",
+};
+
+export function roleLabel(role: AuthContext["role"]) {
+  return roleLabels[role] ?? role;
+}
+
 export function areaForAccount(kind: AccountKind) {
   if (kind === "vyoo") return "/admin";
   if (kind === "partner") return "/parceiro";

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import AppShell from "@/components/app-shell";
 import { Empty } from "@/components/empty-state";
+import { Status } from "@/components/status-badge";
 import {
   Button,
   Checkbox,
@@ -280,16 +281,6 @@ function Stat({
         <strong>{value}</strong>
       </div>
     </div>
-  );
-}
-function Status({ value }: { value: string }) {
-  return (
-    <span
-      className={`status ${value.toLowerCase().replaceAll(" ", "-").replace("ç", "c")}`}
-    >
-      <i />
-      {value}
-    </span>
   );
 }
 function Chart({ partner = false }: { partner?: boolean }) {
