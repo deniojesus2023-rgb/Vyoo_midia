@@ -75,6 +75,12 @@ p{font-size:15.5px;line-height:1.75;color:var(--body);text-wrap:pretty}
 .card .v{font-size:15.5px;line-height:1.55;font-weight:500}
 .card .big{font-weight:800;font-size:30px;letter-spacing:-.05em;line-height:1.1}
 .card.hot .big{color:var(--red)}
+.plate{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}
+.plate img{width:100%;height:auto;display:block}
+.ticket{position:relative}
+.ticket span{position:absolute;font:500 clamp(10px,3.2vw,15px)/1 'DM Mono',monospace;color:#1b2a4e;mix-blend-mode:multiply;transform:rotate(-1.2deg);white-space:nowrap;letter-spacing:.02em}
+.folder{align-self:center;width:min(78%,300px);margin:-6px 0 -4px;animation:in .6s .1s var(--ease) backwards}
+.folder img{width:100%;height:auto;display:block}
 .quote{animation:in .5s var(--ease) backwards}
 .quote:nth-child(2){animation-delay:.12s}
 .ill{font:400 9px 'DM Mono',monospace;letter-spacing:.06em;color:#999;text-transform:uppercase}
@@ -203,6 +209,7 @@ footer{padding:0 24px 28px;text-align:center;font-size:10.5px;line-height:1.7;co
     <p id="msg"></p>
   </div>
   <div class="report" id="report"></div>
+  <figure class="folder"><img src="assets/dossie-pasta.webp" alt="Pasta confidencial do Caso 001 lacrada com cera vermelha" width="1536" height="1024"></figure>
   <div class="unlock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg>O acesso ao Caso 001 está desbloqueado.</div>
   <button class="btn" id="access">Acessar o dossiê confidencial →</button>
   <button class="link" id="review">Revisar minha triagem</button>
@@ -234,6 +241,8 @@ var QUESTIONS=[
   options:['Ignorar a nova evidência.','Manter a teoria original sem alterações.','Reavaliar a hipótese considerando todas as evidências.'],correct:2,
   why:'Uma boa hipótese muda quando surge um fato novo. Ignorar a evidência leva a uma falsa certeza.'}
 ];
+// Dados escritos por cima da imagem da passagem (campos em branco na arte).
+var TICKET={origem:'Curitiba – PR',destino:'Florianópolis – SC',dia:'14',mes:'03',ano:'1999'};
 var MESSAGES={3:'Excelente análise. Você identificou corretamente as três situações investigativas.',2:'Boa análise. Você acertou a maioria dos desafios e está pronto para uma investigação mais complexa.',low:'Toda investigação começa com hipóteses. O próximo passo é aprender a confrontá-las com as evidências.'};
 
 var KEY_RESULT='ac001_triagem',KEY_PROG='ac001_progress',LET=['A','B','C'];
@@ -282,12 +291,15 @@ function openQ(i){
     ev.appendChild(el('<div class="photo"><img src="assets/foto-familia.webp" alt="Fotografia identificada como de 1999" width="1536" height="864"></div>'));
     ev.appendChild(el('<div class="pair"><div class="card"><span class="k">Data da foto</span><span class="big">1999</span></div><div class="card hot"><span class="k">Nascimento</span><span class="big">2008</span></div></div>'));
   }else if(q.kind==='testimony'){
+    ev.appendChild(el('<figure class="plate"><img src="assets/depoimentos.webp" alt="Dois depoimentos datilografados, marcados A e B, com trechos sublinhados em vermelho" width="1536" height="1024"></figure>'));
     q.witnesses.forEach(function(w){var f=el('<figure class="card quote" style="margin:0"><figcaption class="k"></figcaption><blockquote class="v" style="margin:0"></blockquote></figure>');f.firstChild.textContent='Depoimento · '+w.label;f.lastChild.textContent='“'+w.quote+'”';ev.appendChild(f)});
     ev.appendChild(el('<span class="ill">Material ilustrativo. Não faz parte do Caso 001.</span>'));
   }else{
     var a=el('<div class="card"><span class="k">Sua hipótese</span><span class="v"></span></div>');a.lastChild.textContent=q.hypothesis;
     var b=el('<div class="card hot"><span class="k">Nova evidência</span><span class="v"></span></div>');b.lastChild.textContent=q.evidence;
-    ev.appendChild(a);ev.appendChild(b);ev.appendChild(el('<span class="ill">Material ilustrativo. Não faz parte do Caso 001.</span>'));
+    ev.appendChild(a);ev.appendChild(b);
+    ev.appendChild(el('<figure class="plate ticket"><img src="assets/passagem.webp" alt="Passagem de ônibus carimbada, emitida em outro estado" width="1536" height="1024"><span style="left:13.5%;top:50.5%">'+TICKET.origem+'</span><span style="left:48.5%;top:50.5%">'+TICKET.destino+'</span><span style="left:14.5%;top:64%">'+TICKET.dia+'</span><span style="left:22.5%;top:64%">'+TICKET.mes+'</span><span style="left:30.5%;top:64%">'+TICKET.ano+'</span></figure>'));
+    ev.appendChild(el('<span class="ill">Material ilustrativo. Não faz parte do Caso 001.</span>'));
   }
   var o=$('opts');o.innerHTML='';o.className='opts';
   q.options.forEach(function(t,k){
