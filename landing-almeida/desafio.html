@@ -17,7 +17,7 @@ body{margin:0;background:#f4f2f0;color:var(--ink);font-family:Poppins,Arial,sans
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;text-align:left}
 :focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:8px}
 ::selection{background:var(--red);color:#fff}
-.app{width:100%;max-width:560px;min-height:100vh;margin:0 auto;background:#fff;box-shadow:0 20px 70px #2e222010;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.app{width:100%;max-width:560px;min-height:100vh;margin:0 auto;background:#fff;box-shadow:0 20px 70px #2e222010;display:flex;flex-direction:column;position:relative;overflow:clip}
 .topbar{height:4px;background:linear-gradient(90deg,var(--red) 0 24%,#f3eeee 24%)}
 .screen{flex:1;display:none;flex-direction:column;gap:20px;padding:30px 24px 40px}
 .screen.on{display:flex;animation:in .45s var(--ease)}
@@ -42,6 +42,11 @@ p{font-size:15.5px;line-height:1.75;color:var(--body);text-wrap:pretty}
 .stat strong{font-weight:800;font-size:clamp(38px,10vw,52px);line-height:1;letter-spacing:-.06em;color:var(--red);white-space:nowrap;font-variant-numeric:tabular-nums}
 .stat small{font-size:13.5px;line-height:1.55;color:var(--body)}
 .lead{font-weight:700;font-size:clamp(21px,5vw,26px);line-height:1.25;letter-spacing:-.04em;color:var(--ink)}
+.codename{display:flex;flex-direction:column;gap:8px}
+.codename span{color:var(--muted)}
+.codename input{width:100%;min-height:54px;padding:0 16px;border:1.5px solid #e7e0de;border-radius:12px;font:500 15px Poppins,sans-serif;color:var(--ink);background:#fff;transition:border-color .2s,box-shadow .2s}
+.codename input::placeholder{color:#b5adaa}
+.codename input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 4px #c7092014}
 .btn{display:flex;justify-content:center;align-items:center;gap:8px;min-height:58px;width:100%;border-radius:12px;background:var(--red);color:#fff;font-weight:700;font-size:15px;letter-spacing:.02em;text-transform:uppercase;text-align:center;box-shadow:0 9px 20px #c709202a;transition:background .2s,transform .2s var(--ease)}
 .btn:hover{background:var(--red-d);transform:translateY(-2px)}
 .btn:active{transform:scale(.985)}
@@ -52,6 +57,31 @@ p{font-size:15.5px;line-height:1.75;color:var(--body);text-wrap:pretty}
 .perks li{display:flex;gap:8px;align-items:center;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font-size:12.5px;line-height:1.35}
 .perks i{font-style:normal;color:var(--red);font-weight:700}
 .fine{font-size:11px;line-height:1.6;color:var(--muted)}
+
+/* acesso restrito (boot) */
+.app.booting footer{display:none}
+.boot{background:#0f0c0b;color:#e9dcd9;justify-content:center;gap:26px;padding:40px 28px}
+.boot .lock{display:flex;align-items:center;gap:12px;color:#ff6b7b}
+.boot .lock i{width:8px;height:8px;border-radius:50%;background:var(--red);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+.term{font:400 13px/2 'DM Mono',monospace;min-height:150px;color:#cdbdb9}
+.term div{animation:in .25s var(--ease)}
+.term .ok{color:#ff8d9a;font-weight:500}
+.term:after{content:"▍";color:var(--red);animation:blink 1s steps(2) infinite}
+.loadbar{height:3px;border-radius:3px;background:#ffffff18;overflow:hidden}
+.loadbar i{display:block;height:100%;width:0;background:var(--red)}
+.skip{align-self:flex-start;font:500 10px 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8d7f7b;min-height:44px;display:flex;align-items:center}
+.skip:hover{color:#fff}
+
+/* barra do app */
+.appbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:10px;margin:-30px -24px 0;padding:10px 24px;background:#ffffffe6;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);font:500 10px 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.appbar .who{display:flex;align-items:center;gap:10px}
+.appbar .rec{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1.4s steps(2) infinite}
+.appbar b{color:var(--ink);font-weight:500}
+.appbar .tools{display:flex;align-items:center;gap:12px}
+.appbar .clock{font-variant-numeric:tabular-nums;color:var(--ink)}
+.snd{min-height:30px;padding:0 10px;border:1px solid var(--border);border-radius:50px;font:500 9px 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:all .2s}
+.snd[aria-pressed=true]{border-color:#f2b8b5;background:var(--blush);color:var(--red)}
 
 /* quiz */
 .bar{display:flex;justify-content:space-between;align-items:center;min-height:36px}
@@ -64,7 +94,19 @@ p{font-size:15.5px;line-height:1.75;color:var(--body);text-wrap:pretty}
 .qwrap{display:flex;flex-direction:column;gap:16px}
 .qwrap.swap{animation:slide .45s var(--ease)}
 @keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
-.evid{display:flex;flex-direction:column;gap:8px}
+#qctx.typing:after{content:"▍";color:var(--red);margin-left:1px}
+.evidbox{position:relative}
+.evid{display:flex;flex-direction:column;gap:8px;transition:filter .6s var(--ease)}
+.qwrap.sealed .evid{filter:blur(9px) saturate(.6);pointer-events:none;user-select:none}
+.seal{position:absolute;inset:-6px;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;border-radius:16px;border:1.5px dashed #d9a3a9;background:#ffffff59;transition:opacity .5s var(--ease),visibility .5s,transform .5s var(--ease)}
+.seal .sb{font:500 10px 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--red);border:2px solid var(--red);border-radius:6px;padding:7px 12px;transform:rotate(-3deg);background:#fff}
+.seal .sh{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:50px;background:var(--red);color:#fff;font-weight:700;font-size:13px;letter-spacing:.02em;text-transform:uppercase;box-shadow:0 9px 20px #c709202a;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.04)}}
+.seal:hover .sh{background:var(--red-d)}
+.qwrap:not(.sealed) .seal{opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.04)}
+.qa{display:flex;flex-direction:column;gap:16px}
+.qwrap:not(.sealed) .qa{animation:in .55s var(--ease)}
+.qwrap.sealed .qa{display:none}
 .evid .photo{border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .evid .photo img{width:100%;height:auto;display:block}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -102,15 +144,28 @@ p{font-size:15.5px;line-height:1.75;color:var(--body);text-wrap:pretty}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .warn{padding:10px 12px;border:1px solid #f2b8b5;border-radius:10px;background:var(--blush);font-size:13px;line-height:1.5;color:#9b001a;display:none}
 .warn.on{display:block;animation:in .3s var(--ease)}
-.fb{display:none;padding:16px 18px;border-radius:12px;gap:6px;flex-direction:column}
+.fb{display:none;padding:16px 18px;border-radius:12px;gap:6px;flex-direction:column;position:relative}
 .fb.on{display:flex;animation:in .4s var(--ease)}
 .fb.good{background:#f2faf5;border:1px solid #bfe0cb}
 .fb.miss{background:var(--blush);border:1px solid #f2dad9}
 .fb b{font:500 10px 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase}
 .fb.good b{color:var(--green)}.fb.miss b{color:var(--red)}
 .fb p{font-size:14.5px;line-height:1.6;color:var(--ink)}
+.fb .st{position:absolute;right:14px;top:12px;font:500 9px 'DM Mono',monospace;letter-spacing:.14em;border:1.5px solid;border-radius:5px;padding:4px 7px;transform:rotate(4deg);animation:stamp .4s var(--ease) backwards}
+.fb.good .st{color:var(--green)}.fb.miss .st{color:var(--red)}
 .kbd{display:none;text-align:center;font:400 10px 'DM Mono',monospace;color:#aaa;letter-spacing:.06em}
 @media(hover:hover) and (min-width:700px){.kbd{display:block}}
+
+/* transição de arquivo */
+.trans{position:absolute;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#fff;text-align:center;pointer-events:none}
+.trans.on{display:flex;animation:flash 1s var(--ease) forwards}
+@keyframes flash{0%{opacity:0}15%{opacity:1}80%{opacity:1}100%{opacity:0}}
+.trans .n{font:800 clamp(80px,26vw,130px)/1 Poppins,sans-serif;letter-spacing:-.07em;color:var(--red)}
+.trans .n small{color:#d9cfcd;font-size:.4em;letter-spacing:-.04em}
+.trans .t{font:500 11px 'DM Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
+.trans .s{font:400 10px 'DM Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.trans:before{content:"";position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);animation:scan 1s linear forwards}
+@keyframes scan{from{top:0}to{top:100%}}
 
 /* analyzing */
 .analyzing{justify-content:center;align-items:center;text-align:center;gap:20px}
@@ -124,7 +179,17 @@ p{font-size:15.5px;line-height:1.75;color:var(--body);text-wrap:pretty}
 
 /* result */
 .stamp{align-self:flex-start;border:2px solid var(--red);color:var(--red);border-radius:6px;padding:6px 12px;font:500 11px 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;transform:rotate(-3deg);animation:stamp .5s .15s var(--ease) backwards}
-@keyframes stamp{from{opacity:0;transform:rotate(-12deg) scale(1.8)}to{opacity:1;transform:rotate(-3deg)}}
+@keyframes stamp{from{opacity:0;transform:rotate(-12deg) scale(1.8)}to{opacity:1}}
+.cred{border-radius:16px;background:var(--ink);color:#f3ece9;overflow:hidden;box-shadow:0 18px 40px -18px #000a;animation:in .6s .2s var(--ease) backwards}
+.cred-top{display:flex;justify-content:space-between;padding:10px 16px;background:var(--red);color:#fff}
+.cred-body{display:flex;gap:16px;padding:18px 16px;align-items:center}
+.cred-ph{flex:none;width:62px;height:74px;border-radius:8px;background:#2a2523;display:grid;place-items:center;color:#8d7f7b}
+.cred-info{display:flex;flex-direction:column;gap:3px;min-width:0}
+.cred-info b{font-size:21px;font-weight:700;letter-spacing:-.03em;line-height:1.2;overflow-wrap:anywhere}
+.cred-info .r{color:#ff8d9a}
+.cred-info .i{color:#9d8f8c}
+.cred-foot{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px dashed #ffffff26;color:#9d8f8c}
+.cred-foot b{color:#fff;font-weight:500}
 .score{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;padding:20px;border:1px solid var(--border);border-radius:16px}
 .ring{position:relative;width:104px;height:104px}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
@@ -151,7 +216,7 @@ footer{padding:0 24px 28px;text-align:center;font-size:10.5px;line-height:1.7;co
 </style>
 </head>
 <body>
-<div class="app">
+<div class="app" id="app">
 <div class="topbar"></div>
 
 <!-- INTRO -->
@@ -162,6 +227,7 @@ footer{padding:0 24px 28px;text-align:center;font-size:10.5px;line-height:1.7;co
   <div class="stat"><strong><span id="count">0</span> de 30</strong><small>Em nosso teste com 30 participantes, apenas 3 chegaram à solução correta sem consultar as dicas.</small></div>
   <p class="lead">E você, será que consegue?</p>
   <p>Antes de acessar o Caso 001, você receberá três desafios para testar sua capacidade de observar evidências, identificar contradições e construir hipóteses.</p>
+  <label class="codename"><span class="mono">Seu nome de código (opcional)</span><input id="codename" maxlength="18" placeholder="Ex.: Marina" autocomplete="off" enterkeyhint="go"></label>
   <button class="btn" id="start"><span id="startLabel">Iniciar minha triagem</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
   <ul class="perks">
     <li><i>✓</i>3 desafios investigativos</li><li><i>✓</i>Aproximadamente 2 minutos</li>
@@ -170,24 +236,41 @@ footer{padding:0 24px 28px;text-align:center;font-size:10.5px;line-height:1.7;co
   <p class="fine">Os 10% se referem ao resultado do teste original do Caso 001 completo, realizado com 30 participantes. A triagem a seguir é um aquecimento com situações simples e não reproduz essa taxa.</p>
 </section>
 
+<!-- ACESSO RESTRITO -->
+<section class="screen boot" id="s-boot" aria-label="Acesso restrito" aria-live="polite">
+  <div class="lock mono"><i></i>Acesso restrito</div>
+  <div class="term" id="term"></div>
+  <div class="loadbar"><i id="loadfill"></i></div>
+  <button class="skip" id="skip">Pular →</button>
+</section>
+
 <!-- QUIZ -->
 <section class="screen" id="s-q" aria-labelledby="t-q">
+  <div class="appbar">
+    <div class="who"><span class="rec" aria-hidden="true"></span><span>Caso 001</span><b id="agent">Inv. Nº 0000</b></div>
+    <div class="tools"><span class="clock" id="clock" aria-label="Tempo de investigação">00:00</span><button class="snd" id="snd" aria-pressed="false">Som: off</button></div>
+  </div>
   <div class="bar">
     <button class="back" id="back">← Voltar</button>
-    <span class="mono" style="color:var(--muted)">Questão <span id="qn">01</span> de 03</span>
+    <span class="mono" style="color:var(--muted)">Evidência <span id="qn">01</span> de 03</span>
   </div>
   <div class="steps" id="steps" role="progressbar" aria-label="Progresso da triagem" aria-valuemin="1" aria-valuemax="3"><i></i><i></i><i></i></div>
-  <div class="qwrap" id="qwrap">
+  <div class="qwrap sealed" id="qwrap">
     <div class="tag mono" id="qtag"></div>
     <h2 id="t-q"></h2>
     <p id="qctx"></p>
-    <div class="evid" id="evid"></div>
-    <p class="question" id="qq"></p>
-    <div class="opts" id="opts" role="radiogroup" aria-labelledby="qq"></div>
-    <p class="warn" id="warn" role="alert">Selecione uma alternativa para continuar a triagem.</p>
-    <div class="fb" id="fb" aria-live="polite"><b></b><p></p></div>
-    <button class="btn dark" id="confirm">Confirmar resposta</button>
-    <div class="kbd">Atalhos: A · B · C para escolher &nbsp;|&nbsp; Enter para confirmar</div>
+    <div class="evidbox">
+      <div class="evid" id="evid"></div>
+      <button class="seal" id="seal" aria-label="Abrir evidência lacrada"><span class="sb">Evidência lacrada</span><span class="sh">Examinar evidência</span></button>
+    </div>
+    <div class="qa" id="qa">
+      <p class="question" id="qq"></p>
+      <div class="opts" id="opts" role="radiogroup" aria-labelledby="qq"></div>
+      <p class="warn" id="warn" role="alert">Selecione uma alternativa para continuar a triagem.</p>
+      <div class="fb" id="fb" aria-live="polite"><b></b><span class="st"></span><p></p></div>
+      <button class="btn dark" id="confirm">Confirmar resposta</button>
+      <div class="kbd">Atalhos: A · B · C para escolher &nbsp;|&nbsp; Enter para confirmar</div>
+    </div>
   </div>
 </section>
 
@@ -204,6 +287,14 @@ footer{padding:0 24px 28px;text-align:center;font-size:10.5px;line-height:1.7;co
   <div class="head mono"><span>Relatório de triagem</span><span>Caso 001</span></div>
   <div class="stamp">Triagem concluída</div>
   <h1 id="t-res" style="font-size:clamp(30px,8vw,42px)">Seu <span>resultado</span></h1>
+  <div class="cred">
+    <div class="cred-top mono"><span>Credencial de investigador</span><span>Caso 001</span></div>
+    <div class="cred-body">
+      <div class="cred-ph" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></div>
+      <div class="cred-info"><b id="cName">Investigador</b><span class="mono r" id="cRank"></span><span class="mono i" id="cId"></span></div>
+    </div>
+    <div class="cred-foot mono"><span>Acertos <b id="cScore"></b></span><span>Tempo <b id="cTime"></b></span></div>
+  </div>
   <div class="score">
     <div class="ring"><svg viewBox="0 0 104 104"><circle class="bg" cx="52" cy="52" r="46"/><circle class="fg" id="ringfg" cx="52" cy="52" r="46"/></svg><div><span><span id="scoreN">0</span><span style="color:#bbb;font-size:20px">/3</span><small>ACERTOS</small></span></div></div>
     <p id="msg"></p>
@@ -216,6 +307,8 @@ footer{padding:0 24px 28px;text-align:center;font-size:10.5px;line-height:1.7;co
 </section>
 
 <footer>Arquivos Confidenciais · Experiência de investigação ficcional. Este desafio não é um teste de QI.</footer>
+
+<div class="trans" id="trans" aria-hidden="true"><div class="s">Abrindo arquivo</div><div class="n" id="tn"></div><div class="t" id="tt"></div></div>
 </div>
 
 <script>
@@ -244,48 +337,104 @@ var QUESTIONS=[
 // Dados escritos por cima da imagem da passagem (campos em branco na arte).
 var TICKET={origem:'Curitiba – PR',destino:'Florianópolis – SC',dia:'14',mes:'03',ano:'1999'};
 var MESSAGES={3:'Excelente análise. Você identificou corretamente as três situações investigativas.',2:'Boa análise. Você acertou a maioria dos desafios e está pronto para uma investigação mais complexa.',low:'Toda investigação começa com hipóteses. O próximo passo é aprender a confrontá-las com as evidências.'};
+var RANKS={3:'Detetive',2:'Investigador',low:'Aprendiz'};
 
-var KEY_RESULT='ac001_triagem',KEY_PROG='ac001_progress',LET=['A','B','C'];
+var KEY_RESULT='ac001_triagem',KEY_PROG='ac001_progress',KEY_ID='ac001_agent',KEY_NAME='ac001_name',KEY_T0='ac001_t0',KEY_SND='ac001_snd',KEY_BOOT='ac001_boot',LET=['A','B','C'];
 function ssGet(k){try{return JSON.parse(sessionStorage.getItem(k)||'null')}catch(e){return null}}
 function ssSet(k,v){try{sessionStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function track(n,d,o){try{window.Funnel&&window.Funnel.track(n,d,o)}catch(e){}}
 var reduce=false;try{reduce=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
 var $=function(id){return document.getElementById(id)};
 function el(h){var d=document.createElement('div');d.innerHTML=h;return d.firstChild}
+function pad(n,l){return String(n).padStart(l||2,'0')}
 
 var prog=ssGet(KEY_PROG)||{},res=ssGet(KEY_RESULT);
 var answers=Array.isArray(prog.answers)&&prog.answers.length===3?prog.answers:[null,null,null];
 var step=Math.min(prog.step||0,2),screen=prog.screen==='q'?'q':(res&&res.done?'result':'intro');
 var picked=null,locked=false;
+var agent=ssGet(KEY_ID);if(!agent){agent=pad(Math.floor(Math.random()*9000)+100,4);ssSet(KEY_ID,agent)}
+var codename=ssGet(KEY_NAME)||'';
 
-function save(){if(screen!=='analyzing')ssSet(KEY_PROG,{screen:screen,step:step,answers:answers})}
+/* som (opcional, desligado por padrão) */
+var AC=null,soundOn=!!ssGet(KEY_SND);
+function tone(f,d,type,v,delay){if(!soundOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();var t=AC.currentTime+(delay||0),o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||.05,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d)}catch(e){}}
+var SFX={key:function(){tone(1300,.02,'square',.015)},pick:function(){tone(520,.06,'square',.03)},open:function(){tone(110,.28,'sine',.14);tone(240,.14,'triangle',.05,.06)},ok:function(){tone(660,.12,'sine',.07);tone(880,.22,'sine',.07,.1)},bad:function(){tone(190,.28,'sawtooth',.05)},file:function(){tone(300,.1,'triangle',.06);tone(450,.14,'triangle',.05,.1)}};
+function paintSnd(){var b=$('snd');b.setAttribute('aria-pressed',soundOn);b.textContent='Som: '+(soundOn?'on':'off')}
+$('snd').onclick=function(){soundOn=!soundOn;ssSet(KEY_SND,soundOn);paintSnd();SFX.pick()};
+paintSnd();
+
+/* relógio de investigação */
+var t0=ssGet(KEY_T0),clockT=null;
+function elapsed(){return t0?Math.max(0,Math.round((Date.now()-t0)/1000)):0}
+function fmt(s){return pad(Math.floor(s/60))+':'+pad(s%60)}
+function tick(){$('clock').textContent=fmt(elapsed())}
+function startClock(){clearInterval(clockT);tick();clockT=setInterval(tick,1000)}
+
+function save(){if(screen!=='analyzing'&&screen!=='boot')ssSet(KEY_PROG,{screen:screen,step:step,answers:answers})}
+var IDS={intro:'intro',boot:'boot',q:'q',analyzing:'an',result:'res'};
 function show(s){
   screen=s;
-  ['intro','q','an','res'].forEach(function(n){$('s-'+n).classList.remove('on')});
-  $('s-'+({intro:'intro',q:'q',analyzing:'an',result:'res'}[s])).classList.add('on');
+  Object.keys(IDS).forEach(function(k){$('s-'+IDS[k]).classList.remove('on')});
+  $('s-'+IDS[s]).classList.add('on');
+  $('app').classList.toggle('booting',s==='boot');
   save();window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
 }
 function score(){return QUESTIONS.reduce(function(s,q,i){return s+(answers[i]===q.correct?1:0)},0)}
 
-// intro
+/* intro */
 function countUp(){var e=$('count'),i=0;if(reduce){e.textContent=3;return}var iv=setInterval(function(){e.textContent=++i;if(i>=3)clearInterval(iv)},320)}
 function intro(){
   $('startLabel').textContent=answers.some(function(a){return a!==null})?'Continuar minha triagem':'Iniciar minha triagem';
+  $('codename').value=codename;
   show('intro');$('count').textContent='0';setTimeout(countUp,500);
 }
-$('start').onclick=function(){
+function begin(){
+  codename=$('codename').value.trim().slice(0,18);ssSet(KEY_NAME,codename);
   track('challenge_start',{},{once:true});
-  var f=answers.indexOf(null);openQ(f>-1?f:0);
-};
+  if(!t0){t0=Date.now();ssSet(KEY_T0,t0)}
+  var fresh=answers.every(function(a){return a===null});
+  if(fresh&&!ssGet(KEY_BOOT)){ssSet(KEY_BOOT,true);boot()}else resume();
+}
+function resume(){var f=answers.indexOf(null);openQ(f>-1?f:0,true)}
+$('start').onclick=begin;
+$('codename').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();begin()}});
 
-// quiz
-function openQ(i){
+/* acesso restrito */
+var bootT=[];
+function boot(){
+  show('boot');var term=$('term'),fill=$('loadfill');term.textContent='';
+  fill.style.transition='none';fill.style.width='0';void fill.offsetWidth;
+  var who=codename?codename.toUpperCase():'Nº '+agent;
+  var lines=['> Verificando credenciais…','> Investigador '+who+' identificado','> Descriptografando arquivo: CASO 001','> Acesso concedido.'],gap=reduce?60:650;
+  lines.forEach(function(l,i){bootT.push(setTimeout(function(){var d=document.createElement('div');d.textContent=l;if(i===lines.length-1)d.className='ok';term.appendChild(d);SFX.key()},i*gap+250))});
+  fill.style.transition='width '+(lines.length*gap/1000+.3)+'s linear';fill.style.width='100%';
+  bootT.push(setTimeout(skipBoot,lines.length*gap+800));
+}
+function skipBoot(){bootT.forEach(clearTimeout);bootT=[];if(screen!=='boot')return;SFX.open();resume()}
+$('skip').onclick=skipBoot;
+
+/* quiz */
+var typeT=null;
+function typeText(node,text){
+  clearInterval(typeT);node.style.minHeight='';node.classList.remove('typing');node.textContent=text;
+  if(reduce)return;
+  node.style.minHeight=node.offsetHeight+'px';node.textContent='';node.classList.add('typing');
+  var i=0;typeT=setInterval(function(){i+=2;node.textContent=text.slice(0,i);if(i>=text.length){clearInterval(typeT);node.classList.remove('typing')}},16);
+}
+function flashTrans(i){
+  if(reduce)return;var t=$('trans');$('tn').innerHTML=pad(i+1)+'<small>/03</small>';$('tt').textContent=QUESTIONS[i].label;
+  t.classList.remove('on');void t.offsetWidth;t.classList.add('on');SFX.file();
+  setTimeout(function(){t.classList.remove('on')},1050);
+}
+function go(i){flashTrans(i);openQ(i,false)}
+function openQ(i,quiet){
   step=i;locked=false;picked=answers[i];var q=QUESTIONS[i];
-  $('qn').textContent=String(i+1).padStart(2,'0');
+  $('agent').textContent='Inv. Nº '+agent;startClock();
+  $('qn').textContent=pad(i+1);
   var segs=$('steps').children;for(var k=0;k<3;k++)segs[k].className=k<i?'done':(k===i?'cur':'');
-  $('steps').setAttribute('aria-valuenow',i+1);$('steps').setAttribute('aria-valuetext','Questão '+(i+1)+' de 3');
-  $('qtag').textContent='Desafio '+String(i+1).padStart(2,'0')+' — '+q.label;
-  $('t-q').textContent=q.title;$('qctx').textContent=q.context;$('qq').textContent=q.question;
+  $('steps').setAttribute('aria-valuenow',i+1);$('steps').setAttribute('aria-valuetext','Evidência '+(i+1)+' de 3');
+  $('qtag').textContent='Desafio '+pad(i+1)+' — '+q.label;
+  $('t-q').textContent=q.title;$('qq').textContent=q.question;
   var ev=$('evid');ev.innerHTML='';
   if(q.kind==='photo'){
     ev.appendChild(el('<div class="photo"><img src="assets/foto-familia.webp" alt="Fotografia identificada como de 1999" width="1536" height="864"></div>'));
@@ -309,17 +458,26 @@ function openQ(i){
   if(picked!==null)paint();
   $('warn').classList.remove('on');$('fb').className='fb';
   $('confirm').textContent=i===2?'Enviar minha triagem':'Confirmar resposta';
+  $('qwrap').classList.toggle('sealed',answers[i]===null);
   var w=$('qwrap');w.classList.remove('swap');void w.offsetWidth;w.classList.add('swap');
   show('q');
+  typeText($('qctx'),q.context);
 }
+function openSeal(){
+  var w=$('qwrap');if(!w.classList.contains('sealed'))return;
+  w.classList.remove('sealed');SFX.open();try{navigator.vibrate&&navigator.vibrate([10,30,10])}catch(e){}
+  track('challenge_evidence_opened',{question:step+1},{onceKey:'ev_'+(step+1)});
+}
+$('seal').onclick=openSeal;
 function paint(){[].forEach.call($('opts').children,function(b,k){var s=k===picked;b.classList.toggle('sel',s);b.setAttribute('aria-checked',s)})}
-function pick(k){if(locked)return;picked=k;paint();$('warn').classList.remove('on');try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}}
+function pick(k){if(locked||$('qwrap').classList.contains('sealed'))return;picked=k;paint();SFX.pick();$('warn').classList.remove('on');try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}}
 function reveal(){
   locked=true;var q=QUESTIONS[step],ok=picked===q.correct,o=$('opts');o.classList.add('locked');
   [].forEach.call(o.children,function(b,k){b.classList.remove('sel');if(k===q.correct)b.classList.add('ok');else if(k===picked)b.classList.add('bad')});
   var fb=$('fb');fb.className='fb on '+(ok?'good':'miss');
-  fb.querySelector('b').textContent=ok?'✓ Boa dedução':'Atenção ao raciocínio';fb.querySelector('p').textContent=q.why;
-  $('confirm').textContent=step===2?'Ver meu resultado →':'Próxima questão →';
+  fb.querySelector('b').textContent=ok?'✓ Boa dedução':'Atenção ao raciocínio';fb.querySelector('.st').textContent=ok?'VALIDADO':'REVISAR';fb.querySelector('p').textContent=q.why;
+  ok?SFX.ok():SFX.bad();
+  $('confirm').textContent=step===2?'Ver meu resultado →':'Próxima evidência →';
   fb.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});
 }
 $('confirm').onclick=function(){
@@ -327,43 +485,52 @@ $('confirm').onclick=function(){
     if(picked===null){$('warn').classList.add('on');var o=$('opts');o.classList.remove('shake');void o.offsetWidth;o.classList.add('shake');return}
     answers[step]=picked;save();track('challenge_question_answered',{question:step+1,answer:LET[picked]},{onceKey:'qa_'+(step+1)});reveal();return;
   }
-  if(step<2)openQ(step+1);else finish();
+  if(step<2)go(step+1);else finish();
 };
-$('back').onclick=function(){if(step>0)openQ(step-1);else intro()};
+$('back').onclick=function(){if(step>0)openQ(step-1,true);else intro()};
 document.addEventListener('keydown',function(e){
-  if(screen!=='q'||e.metaKey||e.ctrlKey)return;var i=LET.indexOf(e.key.toUpperCase());
-  if(i>-1)pick(i);else if(e.key==='Enter'&&document.activeElement.tagName!=='BUTTON'){e.preventDefault();$('confirm').click()}
+  if(e.metaKey||e.ctrlKey)return;
+  if(screen==='boot'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();skipBoot();return}
+  if(screen!=='q')return;
+  var tag=document.activeElement.tagName;
+  if($('qwrap').classList.contains('sealed')){if(e.key==='Enter'&&tag!=='BUTTON'){e.preventDefault();openSeal()}return}
+  var i=LET.indexOf(e.key.toUpperCase());
+  if(i>-1)pick(i);else if(e.key==='Enter'&&tag!=='BUTTON'){e.preventDefault();$('confirm').click()}
 });
 
-// análise e resultado
+/* análise e resultado */
 function finish(){
-  var sc=score();show('analyzing');
-  var lines=['> Cruzando respostas com as evidências…','> Verificando consistência das deduções…','> Gerando relatório de triagem…'],log=$('log');log.textContent='';
-  lines.forEach(function(l,i){setTimeout(function(){var d=document.createElement('div');d.textContent=l;log.appendChild(d)},reduce?0:i*420)});
+  var sc=score(),secs=elapsed();clearInterval(clockT);show('analyzing');
+  var lines=['> Cruzando respostas com as evidências…','> Verificando consistência das deduções…','> Emitindo credencial de investigador…'],log=$('log');log.textContent='';
+  lines.forEach(function(l,i){setTimeout(function(){var d=document.createElement('div');d.textContent=l;log.appendChild(d);SFX.key()},reduce?0:i*420)});
   setTimeout(function(){
-    ssSet(KEY_RESULT,{done:true,score:sc,answers:answers,at:Date.now()});
-    track('challenge_complete',{score:sc},{once:true});showResult();track('challenge_result_view',{score:sc},{once:true});
+    ssSet(KEY_RESULT,{done:true,score:sc,answers:answers,secs:secs,at:Date.now()});
+    track('challenge_complete',{score:sc,seconds:secs},{once:true});showResult();track('challenge_result_view',{score:sc},{once:true});
   },reduce?250:1500);
 }
 function showResult(){
-  var sc=score();show('result');
-  $('msg').textContent=sc===3?MESSAGES[3]:sc===2?MESSAGES[2]:MESSAGES.low;
+  var sc=score(),r0=ssGet(KEY_RESULT)||{},secs=typeof r0.secs==='number'?r0.secs:elapsed(),key=sc===3?3:sc===2?2:'low';
+  show('result');
+  $('msg').textContent=MESSAGES[key];
+  $('cName').textContent=codename||'Investigador';$('cRank').textContent=RANKS[key];$('cId').textContent='Inv. Nº '+agent;
+  $('cScore').textContent=sc+'/3';$('cTime').textContent=fmt(secs);
   var r=$('report');r.innerHTML='';
   QUESTIONS.forEach(function(q,i){var ok=answers[i]===q.correct;
     var row=el('<div class="row"><span class="n"></span><span class="nm"></span><span class="pill"></span></div>');
-    row.children[0].textContent=String(i+1).padStart(2,'0');row.children[1].textContent=q.label;
+    row.children[0].textContent=pad(i+1);row.children[1].textContent=q.label;
     row.children[2].className='pill '+(ok?'y':'n');row.children[2].textContent=ok?'✓ CORRETA':'✗ REVISAR';r.appendChild(row)});
   var fg=$('ringfg');fg.style.strokeDashoffset=289;
   setTimeout(function(){fg.style.strokeDashoffset=289-289*(sc/3)},50);
   var n=$('scoreN'),i=0;n.textContent=0;
   if(sc>0&&!reduce){var iv=setInterval(function(){n.textContent=++i;if(i>=sc)clearInterval(iv)},350)}else n.textContent=sc;
+  SFX.file();
 }
 $('access').onclick=function(){window.location.href=window.Funnel?window.Funnel.withParams(SALES_URL):SALES_URL+location.search};
-$('review').onclick=function(){answers=[null,null,null];openQ(0)};
+$('review').onclick=function(){answers=[null,null,null];t0=Date.now();ssSet(KEY_T0,t0);openQ(0,true)};
 
 track('challenge_view',{step:'landing'},{once:true});
 if(screen==='result'){showResult();track('challenge_result_view',{score:score()},{once:true})}
-else if(screen==='q')openQ(step);
+else if(screen==='q')openQ(step,true);
 else intro();
 </script>
 </body>
